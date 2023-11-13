@@ -1,0 +1,11 @@
+version: '3.1'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: cobbleweb
+      POSTGRES_USER: cobbleweb
+      POSTGRES_PASSWORD: pwdpwd
+    ports:
+      - "5432:5432"

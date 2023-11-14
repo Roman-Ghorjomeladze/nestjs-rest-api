@@ -1,14 +1,23 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "../../user/entities/user.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Client } from '../../client/entities/client.entity';
 
 @Entity()
 export class Photo {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    url: string;
+  @Column()
+  url: string;
 
-    @ManyToOne(() => User, (user) => user.photos)
-    user: User;
+  @Column()
+  key: string;
+
+  @Column()
+  etag: string;
+
+  @Column()
+  clientId?: number;
+
+  @ManyToOne(() => Client, (client) => client.photos)
+  client: Client;
 }

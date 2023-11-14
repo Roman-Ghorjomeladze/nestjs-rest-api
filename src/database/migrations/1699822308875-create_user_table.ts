@@ -1,64 +1,35 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateUserTable1699822308875 implements MigrationInterface {
+  name = 'CreateUserTable1699822308875';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.createTable(new Table({
-            name: 'user',
-            columns: [
-                {
-                    name: 'id',
-                    type: 'int',
-                    isPrimary: true,
-                    isGenerated: true,
-                    generationStrategy: 'increment',
-                },
-                {
-                    name: 'firstName',
-                    type: 'varchar',
-                    length: '25'
-                },
-                {
-                    name: 'lastName',
-                    type: 'varchar',
-                    length: '25'
-                },
-                {
-                    name: 'email',
-                    type: 'varchar',
-                    isUnique: true,
-                },
-                {
-                    name: 'password',
-                    type: 'varchar',
-                    length: '70'
-                },
-                {
-                    name: 'role',
-                    type: 'varchar',
-                    length: '50'
-                },
-                {
-                    name: 'active',
-                    type: 'boolean',
-                    default: true
-                },
-                {
-                    name: "createdAt",
-                    type: "timestamp",
-                    default: "now()",
-                },
-                {
-                    name: "updatedAt",
-                    type: "timestamp",
-                    default: "now()",
-                    onUpdate: "now()"
-                },
-            ]
-        }), true)
-    }
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+            CREATE TABLE "user" (
+                "id" SERIAL NOT NULL,
+                "firstName" character varying(25) NOT NULL,
+                "lastName" character varying(25) NOT NULL,
+                "email" character varying NOT NULL,
+                "password" character varying(70) NOT NULL,
+                "role" character varying(20) NOT NULL,
+                "active" boolean DEFAULT true,
+                "createdAt" timestamp DEFAULT now(),
+                "updatedAt" timestamp DEFAULT now(),
+                CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"),
+                CONSTRAINT "UQ_e12875dfb3b1d92d7d7c5377e22" UNIQUE ("email")
+            );
+            CREATE TRIGGER set_timestamp
+            BEFORE
+            UPDATE ON "user"
+            FOR EACH ROW
+            EXECUTE PROCEDURE trigger_set_timestamp();
+        `);
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable('user', true)
-    }
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+            DROP TRIGGER set_timestamp on "user";
+            DROP TABLE "user";
+        `);
+  }
 }

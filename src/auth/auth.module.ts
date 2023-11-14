@@ -6,6 +6,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth.guard';
+import { S3Service } from '../s3/s3.service';
+import { PhotoModule } from '../photo/photo.module';
+import { PhotoService } from '../photo/photo.service';
+import { ClientService } from '../client/client.service';
+import { ClientModule } from '../client/client.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Client } from '../client/entities/client.entity';
 
 @Module({
   controllers: [AuthController],
@@ -15,6 +22,9 @@ import { AuthGuard } from './auth.guard';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    S3Service,
+    PhotoService,
+    ClientService,
   ],
   imports: [
     UserModule,
@@ -26,10 +36,13 @@ import { AuthGuard } from './auth.guard';
           global: true,
           secret: configService.get('jwt_secret'),
           signOptions: { expiresIn: '2h' },
-        }
+        };
       },
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
-  ]
+    PhotoModule,
+    ClientModule,
+    TypeOrmModule.forFeature([Client]),
+  ],
 })
 export class AuthModule {}

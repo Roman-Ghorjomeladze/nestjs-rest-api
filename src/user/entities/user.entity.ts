@@ -1,35 +1,50 @@
-import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Photo } from "../../photo/entities/photo.entity";
+import {
+  BeforeInsert,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
+
+import { Client } from '../../client/entities/client.entity';
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    firstName: string;
-  
-    @Column()
-    lastName: string;
+  @Column()
+  firstName: string;
 
-    @Column({select: false})
-    password: string;
+  @Column()
+  lastName: string;
 
-    @Column()
-    email: string;
+  @Column({ select: false })
+  password: string;
 
-    @Column()
-    role: string;
-  
-    @Column({ default: true })
-    active: boolean;
-  
-    @OneToMany(type => Photo, photo => photo.user)
-    photos: Photo[];
+  @Column()
+  email: string;
 
-    @BeforeInsert()
-    async hashPassword() {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
+  @Column()
+  role: string;
+
+  @Column({ default: true })
+  active: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @OneToMany(() => Client, (client) => client.user)
+  client: Client[];
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
 }

@@ -5,18 +5,18 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ValidationPipe } from '@nestjs/common';
-import { UserService } from './user/user.service';
+import { ClientService } from './client/client.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  const userService = app.get(UserService);
   const jwtService = app.get(JwtService);
+  const clientService = app.get(ClientService);
 
   app.enableCors();
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
-  app.useGlobalGuards(new AuthGuard(jwtService, configService, userService));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalGuards(new AuthGuard(jwtService, configService, clientService));
 
   const config = new DocumentBuilder()
     .setTitle('CobbleWeb')

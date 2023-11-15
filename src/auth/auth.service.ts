@@ -34,7 +34,7 @@ export class AuthService {
     }
     const isMatch = await bcrypt.compare(dto.password, user.password);
     if (!isMatch) {
-      throw new UnauthorizedException();
+      throw new NotFoundException();
     }
     try {
       const client = await this.clientService.getClientByUserId(user.id);

@@ -10,16 +10,16 @@ import { AuthValidationTexts } from '../constants';
 
 export class SignUpDto {
   @ApiProperty({
-    description: AuthValidationTexts.signUp.email,
+    description: AuthValidationTexts.auth.email,
   })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
   @ApiProperty({
-    description: AuthValidationTexts.signUp.password,
+    description: AuthValidationTexts.auth.password,
   })
-  @Matches(/^(?=.*\d).{6,}$/, { message: AuthValidationTexts.signUp.password })
+  @Matches(/^(?=.*\d).{6,}$/, { message: AuthValidationTexts.auth.password })
   @Length(2, 50)
   password: string;
 
@@ -27,7 +27,6 @@ export class SignUpDto {
     description: AuthValidationTexts.notEmpty,
   })
   @IsString()
-  @IsNotEmpty()
   @Length(2, 25)
   firstName: string;
 
@@ -35,7 +34,6 @@ export class SignUpDto {
     description: AuthValidationTexts.notEmpty,
   })
   @IsString()
-  @IsNotEmpty()
   @Length(2, 25)
   lastName: string;
 }

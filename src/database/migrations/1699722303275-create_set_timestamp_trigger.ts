@@ -10,7 +10,7 @@ export class CreateSetTimestampTrigger1699926303275
             CREATE FUNCTION trigger_set_timestamp()
             RETURNS TRIGGER AS $$
             BEGIN
-            NEW.updated_at = NOW();
+            NEW.updatedAt = NOW();
             RETURN NEW;
             END;
             $$ LANGUAGE plpgsql;

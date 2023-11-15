@@ -8,4 +8,4 @@ services:
       POSTGRES_USER: cobbleweb
       POSTGRES_PASSWORD: pwdpwd
     ports:
-      - "5432:5432"
+      - "5431:5432"

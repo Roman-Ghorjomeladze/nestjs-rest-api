@@ -17,7 +17,6 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalGuards(new AuthGuard(jwtService, configService, clientService));
-
   const config = new DocumentBuilder()
     .setTitle('CobbleWeb')
     .setDescription('The CobbleWeb home assignment API')

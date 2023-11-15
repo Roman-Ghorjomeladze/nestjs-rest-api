@@ -24,12 +24,29 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+[Nest](https://github.com/nestjs/nest) framework TypeScript repository.
 
-## Installation
 
+## Setup
 ```bash
-$ npm install
+  # Create and Fill .env file with environment variables.
+
+  # First step -> Install dependecnies
+  $ npm install
+
+  # Database setup
+  # Make sure that you have docker installed on your device and in the root directory of the app execute
+  $ docker-compose up
+
+  # The command will configure postgresql database in docker container. If you already have PGSQL installed, you can skip this step and just create database.
+
+  # Next step -> Migrate database, for this you should execute following command
+  $ npm run migration:run
+
+  # After this database will be ready, you can start the app and play with api endpoints.
+  $ npm run start
+
+  # You can check http://localhost:3000/api/docs Endpoint in your browser, you'll see swagger page with all available api endpoints
 ```
 
 ## Running the app
@@ -57,6 +74,11 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 
+# Keep in mind that for now I'm using the same database for testing as well. It can be changed by configuring separate db and updating env variables.
+```
+
+## Migrations
+```
 # generate migration
 $ npm run migration:generate -- src/database/YourMigrationName
 
@@ -65,25 +87,4 @@ $ npm run migration:run
 
 # revert migration
 $ npm run migration:revert
-```
-## Setup
-```bash
-  # Create and Fill .env file with environment variables.
-
-  # First step -> Install dependecnies
-  $ npm i
-
-  # Database setup
-  # Make sure that you have docker installed on your device and in the root directory of the app execute
-  $ docker-compose up
-
-  # The command will configure postgresql database in docker container. If you already have PGSQL installed, you can skip this step and just create database.
-
-  # Next step -> Migrate database, for this, as mentioned above, you should execute following command
-  $ npm run migration:run
-
-  # After this database will be ready, you can start the app and play with api endpoints.
-  $ npm run start
-
-  # You can check http://localhost:3000/api/docs Endpoint in your browser, you'll see swagger page with all available api endpoints
 ```

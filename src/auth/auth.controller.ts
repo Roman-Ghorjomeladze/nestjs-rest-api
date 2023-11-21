@@ -5,6 +5,7 @@ import {
   HttpStatus,
   ParseFilePipeBuilder,
   Post,
+  Req,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { MinFileCountValidator } from './validator/fileTypeValidationCounter.validator';
 import { MaxFileSizeValidator } from './validator/maxFilesSize.validator';
 import { RegistrationFiles } from '../common/types/shared';
+import { RefreshTokenDto } from './dto/refresh.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -49,8 +51,14 @@ export class AuthController {
         .addValidator(new MaxFileSizeValidator())
         .build({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
     )
-    files: RegistrationFiles,
+    test: RegistrationFiles,
+    @Req() req: Request
   ) {
-    return await this.authService.signUp(signUp, files);
+    return await this.authService.signUp(signUp, test);
+  }
+
+  @Post('token')
+  async refreshToken(@Body() dto: RefreshTokenDto) {
+    return await this.authService.refreshToken(dto);
   }
 }

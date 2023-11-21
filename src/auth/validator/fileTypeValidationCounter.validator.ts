@@ -13,7 +13,7 @@ export class MinFileCountValidator extends FileValidator {
   }): boolean | Promise<boolean> {
     if (files?.images?.length < 4) return false;
     let mimeTypesAreValid = true;
-    files.images.forEach((file) => {
+    files?.images?.forEach((file) => {
       if (mimeTypesAreValid && !this.allowedMimeTypes.includes(file.mimetype)) {
         mimeTypesAreValid = false;
       }

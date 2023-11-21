@@ -20,7 +20,6 @@ export class SignUpDto {
     description: AuthValidationTexts.auth.password,
   })
   @Matches(/^(?=.*\d).{6,}$/, { message: AuthValidationTexts.auth.password })
-  @Length(2, 50)
   password: string;
 
   @ApiProperty({

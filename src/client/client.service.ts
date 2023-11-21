@@ -20,7 +20,7 @@ export class ClientService {
   async getClientByUserId(userId: number): Promise<Client> {
     return await this.clientRepository.findOne({
       where: { userId },
-      relations: ['avatar'],
+      relations: ['avatar', 'photos'],
     });
   }
 

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AuthGuard } from './auth/auth.guard';
 import { JwtService } from '@nestjs/jwt';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ClientService } from './client/client.service';
 
 async function bootstrap() {
@@ -16,7 +16,7 @@ async function bootstrap() {
   app.enableCors();
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  app.useGlobalGuards(new AuthGuard(jwtService, configService, clientService));
+  app.useGlobalGuards(new AuthGuard(jwtService, clientService));
   const config = new DocumentBuilder()
     .setTitle('CobbleWeb')
     .setDescription('The CobbleWeb home assignment API')
@@ -26,6 +26,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  await app.listen(configService.get('port'));
+  await app.listen(configService.get('common.port'), () => {
+    Logger.log(`Started on PORT->${configService.get('common.port')}`)
+  });
 }
 bootstrap();

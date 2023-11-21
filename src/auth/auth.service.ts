@@ -14,7 +14,8 @@ import { SignUpDto } from './dto/sign-up.dto';
 import { PHOTO_TYPES, RegistrationFiles } from '../common/types/shared';
 import { PhotoService } from '../photo/photo.service';
 import { ClientService } from '../client/client.service';
-import { Client } from '../client/entities/client.entity';
+import { RefreshTokenDto } from './dto/refresh.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -23,18 +24,17 @@ export class AuthService {
     private jwtService: JwtService,
     private photosService: PhotoService,
     private clientService: ClientService,
+    private configService: ConfigService,
   ) {}
 
   async signIn(dto: SignInDto): Promise<any> {
     const user = await this.usersService.findByEmail(dto.email);
     if (!user) {
-      throw new NotFoundException(
-        'User with such credentials does not exists!',
-      );
+      throw new NotFoundException('User with such credentials does not exists!');
     }
     const isMatch = await bcrypt.compare(dto.password, user.password);
     if (!isMatch) {
-      throw new NotFoundException();
+      throw new NotFoundException('User with such credentials does not exists!');
     }
     try {
       const client = await this.clientService.getClientByUserId(user.id);
@@ -44,7 +44,8 @@ export class AuthService {
       };
 
       return {
-        access_token: await this.jwtService.signAsync(payload),
+          accessToken: await this.jwtService.signAsync(payload),
+          refreshToken: await this.jwtService.signAsync(payload, {expiresIn: '7d'}),
         user: client,
       };
     } catch (error) {
@@ -58,7 +59,7 @@ export class AuthService {
       dto.email,
     );
     if (userWithSuchEmailExists) {
-      return new BadRequestException('User with such email already exists!');
+      throw new BadRequestException('User with such email already exists!');
     }
     try {
       const user = await this.usersService.create(dto);
@@ -95,5 +96,16 @@ export class AuthService {
       console.error('AuthService.signUp:', error);
       throw new InternalServerErrorException('Internal Server Error');
     }
+  }
+
+  async refreshToken (dto: RefreshTokenDto): Promise<{accessToken: string}> {
+    const payload = await this.jwtService.verifyAsync(dto.refreshToken);
+    const user = await this.clientService.getClientByUserId(
+      payload.sub.userId,
+    );
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    return {accessToken: await this.jwtService.signAsync(payload)}
   }
 }

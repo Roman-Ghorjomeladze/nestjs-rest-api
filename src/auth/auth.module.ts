@@ -34,7 +34,7 @@ import { Client } from '../client/entities/client.entity';
       useFactory: async (configService: ConfigService) => {
         return {
           global: true,
-          secret: configService.get('jwt_secret'),
+          secret: configService.get('common.jwt_secret'),
           signOptions: { expiresIn: '2h' },
         };
       },

@@ -6,19 +6,18 @@ import {
 import configuration from './configuration';
 import { config } from 'dotenv';
 import * as Joi from 'joi';
-config();
+config({path: '.env'});
 
 @Module({
   imports: [
     NestConfigModule.forRoot({
       load: [configuration],
+      cache: false,
       isGlobal: true,
       validationSchema: Joi.object({
-        port: Joi.number().default(3000),
-        jwt_secret: Joi.string(),
         database: Joi.object({
-          port: Joi.number().default(5432),
-          host: Joi.string().default('localhost'),
+          port: Joi.number().required(),
+          host: Joi.string().required(),
           user: Joi.string().required(),
           password: Joi.string().required(),
           name: Joi.string().required(),
@@ -32,6 +31,10 @@ config();
           s3_bucket_name: Joi.string().required(),
           s3_bucket_region: Joi.string().required(),
         }),
+        common: Joi.object({
+          port: Joi.required(),
+          jwt_secret: Joi.string(),
+        })
       }),
     }),
   ],

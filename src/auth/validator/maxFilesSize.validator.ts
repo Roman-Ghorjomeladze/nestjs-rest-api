@@ -10,7 +10,7 @@ export class MaxFileSizeValidator extends FileValidator {
 
   isValid(files?: RegistrationFiles): boolean | Promise<boolean> {
     let size = 0;
-    files.images.forEach((file) => {
+    files?.images?.forEach((file) => {
       size += file.size;
     });
     const avatar = files.avatar && files.avatar[0];

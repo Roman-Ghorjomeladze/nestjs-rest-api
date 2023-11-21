@@ -1,7 +1,5 @@
 export default () => {
   return {
-    port: parseInt(process.env.PORT, 10) || 3000,
-    jwt_secret: process.env.JWT_SECRET_STRING,
     database: {
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT, 10) || 5432,
@@ -19,5 +17,9 @@ export default () => {
       s3_bucket_region: process.env.AWS_S3_BUCKET_REGION,
       region: process.env.AWS_REGION,
     },
+    common: {
+      port: parseInt(process.env.PORT, 10) || 3000,
+      jwt_secret: process.env.JWT_SECRET_STRING,
+    }
   };
 };

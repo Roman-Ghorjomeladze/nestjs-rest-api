@@ -9,3 +9,7 @@ services:
       POSTGRES_PASSWORD: pwdpwd
     ports:
       - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:

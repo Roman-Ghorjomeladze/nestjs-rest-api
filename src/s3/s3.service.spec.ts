@@ -12,10 +12,7 @@ describe('S3Service', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        S3Service,
-        ConfigService,
-      ]
+      providers: [S3Service, ConfigService],
     }).compile();
 
     service = module.get<S3Service>(S3Service);
@@ -34,7 +31,6 @@ describe('S3Service', () => {
 
       expect(result).toEqual(S3ResponseMock);
     });
-
   });
 
   describe('s3_upload', () => {
@@ -43,15 +39,12 @@ describe('S3Service', () => {
       const name = 'test-file.txt';
       const mimetype = 'text/plain';
 
-      (AWS.S3.prototype.upload as jest.MockedFunction<any>).mockImplementationOnce(() => ({
+      (
+        AWS.S3.prototype.upload as jest.MockedFunction<any>
+      ).mockImplementationOnce(() => ({
         promise: jest.fn().mockResolvedValueOnce(S3ResponseMock),
       }));
-      const result = await service.s3_upload(
-        FileMock,
-        bucket,
-        name,
-        mimetype,
-      );
+      const result = await service.s3_upload(FileMock, bucket, name, mimetype);
 
       expect(result).toEqual(S3ResponseMock);
     });

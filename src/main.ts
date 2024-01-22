@@ -18,16 +18,16 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalGuards(new AuthGuard(jwtService, clientService));
   const config = new DocumentBuilder()
-    .setTitle('CobbleWeb')
-    .setDescription('The CobbleWeb home assignment API')
+    .setTitle('NestJS')
+    .setDescription('The NestJS API')
     .setVersion('1.0')
-    .addTag('cobbleWeb')
+    .addTag('NestJS')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(configService.get('common.port'), () => {
-    Logger.log(`Started on PORT->${configService.get('common.port')}`)
+    Logger.log(`Started on PORT->${configService.get('common.port')}`);
   });
 }
 bootstrap();

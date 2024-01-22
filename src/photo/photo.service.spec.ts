@@ -9,17 +9,21 @@ import { ManagedUpload } from 'aws-sdk/clients/s3';
 import { PHOTO_TYPES } from '../common/types/shared';
 import { Client } from '../client/entities/client.entity';
 import { dataSourceOptions } from '../common/db/data-source';
-import { FileMock, PhotoMock, S3ResponseMock } from '../../test/utils/mock/user.mock';
+import {
+  FileMock,
+  PhotoMock,
+  S3ResponseMock,
+} from '../../test/utils/mock/user.mock';
 
 class MockS3Service {
-  async uploadFile(file: any): Promise<ManagedUpload.SendData> {
+  async uploadFile(): Promise<ManagedUpload.SendData> {
     return S3ResponseMock;
   }
 }
 
 describe('PhotoService', () => {
   let photoService: PhotoService;
-  let s3Service: S3Service;
+  // let s3Service: S3Service;
   let photoRepository: Repository<Photo>;
 
   beforeEach(async () => {
@@ -32,13 +36,13 @@ describe('PhotoService', () => {
         },
       ],
       imports: [
-        TypeOrmModule.forRoot({...dataSourceOptions }),
+        TypeOrmModule.forRoot({ ...dataSourceOptions }),
         TypeOrmModule.forFeature([Photo, Client]),
-      ]
+      ],
     }).compile();
 
     photoService = module.get<PhotoService>(PhotoService);
-    s3Service = module.get<S3Service>(S3Service);
+    // s3Service = module.get<S3Service>(S3Service);
     photoRepository = module.get<Repository<Photo>>(getRepositoryToken(Photo));
   });
 
@@ -59,7 +63,7 @@ describe('PhotoService', () => {
   describe('createDefaultAvatar', () => {
     it('should create a default avatar', async () => {
       jest.spyOn(promises, 'readFile').mockResolvedValueOnce(Buffer.from(''));
-      jest.spyOn(photoService, 'createPhoto').mockResolvedValue(PhotoMock)
+      jest.spyOn(photoService, 'createPhoto').mockResolvedValue(PhotoMock);
       const result = await photoService.createDefaultAvatar();
 
       expect(result).toBeInstanceOf(Photo);
@@ -72,12 +76,16 @@ describe('PhotoService', () => {
         ETag: 'mockETag',
         Location: 'mockLocation',
         Bucket: 'bucket',
-        Key: 'key'
+        Key: 'key',
       };
 
       jest.spyOn(photoRepository, 'save').mockResolvedValueOnce(new Photo());
 
-      const result = await photoService.createPhoto('mockType', mockS3Record, 1);
+      const result = await photoService.createPhoto(
+        'mockType',
+        mockS3Record,
+        1,
+      );
 
       expect(result).toBeInstanceOf(Photo);
     });
@@ -86,7 +94,11 @@ describe('PhotoService', () => {
   describe('uploadPhotoAndSave', () => {
     it('should upload a photo and save it', async () => {
       jest.spyOn(photoRepository, 'save').mockResolvedValueOnce(new Photo());
-      const result = await photoService.uploadPhotoAndSave(PHOTO_TYPES.IMAGE, FileMock, 1);
+      const result = await photoService.uploadPhotoAndSave(
+        PHOTO_TYPES.IMAGE,
+        FileMock,
+        1,
+      );
 
       expect(result).toBeInstanceOf(Photo);
     });
@@ -94,9 +106,15 @@ describe('PhotoService', () => {
 
   describe('uploadMultiplePhotosAndSave', () => {
     it('should upload multiple photos and save them', async () => {
-      jest.spyOn(photoService, 'uploadPhotoAndSave').mockResolvedValueOnce(PhotoMock);
-      jest.spyOn(photoRepository, 'save').mockResolvedValue(PhotoMock)
-      const result = await photoService.uploadMultiplePhotosAndSave(1, PHOTO_TYPES.IMAGE, [FileMock, FileMock]);
+      jest
+        .spyOn(photoService, 'uploadPhotoAndSave')
+        .mockResolvedValueOnce(PhotoMock);
+      jest.spyOn(photoRepository, 'save').mockResolvedValue(PhotoMock);
+      const result = await photoService.uploadMultiplePhotosAndSave(
+        1,
+        PHOTO_TYPES.IMAGE,
+        [FileMock, FileMock],
+      );
       expect(result).toHaveLength(2);
       expect(result[0]).toBeInstanceOf(Photo);
       expect(result[1]).toBeInstanceOf(Photo);

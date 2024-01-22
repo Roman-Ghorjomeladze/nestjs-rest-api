@@ -5,7 +5,6 @@ import {
   HttpStatus,
   ParseFilePipeBuilder,
   Post,
-  Req,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -52,7 +51,6 @@ export class AuthController {
         .build({ errorHttpStatusCode: HttpStatus.BAD_REQUEST }),
     )
     test: RegistrationFiles,
-    @Req() req: Request
   ) {
     return await this.authService.signUp(signUp, test);
   }

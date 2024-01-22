@@ -10,20 +10,20 @@ import { IRequest } from '../common/types/shared';
 
 describe('UserController', () => {
   let controller: UserController;
-  let userService: UserService;
+  // let userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [UserService],
       imports: [
-        TypeOrmModule.forRoot({...dataSourceOptions}),
-        TypeOrmModule.forFeature([User])
-      ]
+        TypeOrmModule.forRoot({ ...dataSourceOptions }),
+        TypeOrmModule.forFeature([User]),
+      ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
-    userService = module.get<UserService>(UserService);
+    // userService = module.get<UserService>(UserService);
   });
 
   it('should return the user from the request', async () => {

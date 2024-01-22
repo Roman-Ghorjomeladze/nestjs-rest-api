@@ -16,11 +16,13 @@ describe('ClientService', () => {
       imports: [
         TypeOrmModule.forRoot({ ...dataSourceOptions }),
         TypeOrmModule.forFeature([Photo, Client]),
-      ]
+      ],
     }).compile();
 
     service = module.get<ClientService>(ClientService);
-    clientRepository = module.get<Repository<Client>>(getRepositoryToken(Client));
+    clientRepository = module.get<Repository<Client>>(
+      getRepositoryToken(Client),
+    );
   });
 
   it('should be defined', () => {

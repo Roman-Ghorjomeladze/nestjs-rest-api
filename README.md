@@ -26,7 +26,8 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript repository.
 
-
+Simple API to register, login and view your data. It also implements file upload service to AWS S3. \
+Technologies used: NestJS, PostgreSQL, Docker, Jest, TypeORM, aws-sdk, JWT
 ## Setup
 ```bash
   # Create and Fill .env file with environment variables.
@@ -41,7 +42,7 @@
   # The command will configure postgresql database in docker container. If you already have PGSQL installed, you can skip this step and just create database.
 
   # Next step -> Migrate database, for this you should execute following command
-  $ npm run migration:run
+  $ npm run migrate
 
   # After this database will be ready, you can start the app and play with api endpoints.
   $ npm run start
@@ -83,7 +84,7 @@ $ npm run test:cov
 $ npm run migration:generate -- src/database/YourMigrationName
 
 # run migration
-$ npm run migration:run
+$ npm run migrate
 
 # revert migration
 $ npm run migration:revert

@@ -6,7 +6,7 @@ import {
 import configuration from './configuration';
 import { config } from 'dotenv';
 import * as Joi from 'joi';
-config({path: '.env'});
+config({ path: '.env' });
 
 @Module({
   imports: [
@@ -34,7 +34,7 @@ config({path: '.env'});
         common: Joi.object({
           port: Joi.required(),
           jwt_secret: Joi.string(),
-        })
+        }),
       }),
     }),
   ],

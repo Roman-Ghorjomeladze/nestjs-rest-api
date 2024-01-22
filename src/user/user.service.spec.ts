@@ -13,9 +13,9 @@ describe('UserService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [UserService],
       imports: [
-        TypeOrmModule.forRoot({...dataSourceOptions}),
-        TypeOrmModule.forFeature([User])
-      ]
+        TypeOrmModule.forRoot({ ...dataSourceOptions }),
+        TypeOrmModule.forFeature([User]),
+      ],
     }).compile();
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
     service = module.get<UserService>(UserService);
@@ -28,10 +28,10 @@ describe('UserService', () => {
   it('should create a new user', async () => {
     jest.spyOn(userRepository, 'save').mockResolvedValue(UserMock);
     const user = await service.create(SignUpDtoMock);
-    
+
     expect(user).toBeDefined();
     expect(user).toBeInstanceOf(User);
-  })
+  });
 
   it('should find user by email', async () => {
     jest.spyOn(userRepository, 'createQueryBuilder').mockReturnValueOnce({
@@ -42,7 +42,7 @@ describe('UserService', () => {
     const result = await service.findByEmail('test@example.com');
 
     expect(result).toEqual(UserMock);
-  })
+  });
 
   it('should find user by id', async () => {
     jest.spyOn(userRepository, 'findOne').mockResolvedValue(UserMock);
@@ -50,5 +50,5 @@ describe('UserService', () => {
 
     expect(result).toBeDefined();
     expect(result).toEqual(UserMock);
-  })
+  });
 });

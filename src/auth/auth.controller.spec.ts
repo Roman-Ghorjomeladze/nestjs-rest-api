@@ -12,19 +12,23 @@ import { dataSourceOptions } from '../../src/common/db/test_data-source';
 import { Photo } from '../../src/photo/entities/photo.entity';
 import { AuthService } from './auth.service';
 import { Client } from '../client/entities/client.entity';
-import { ClientMock, SignInDtoMock, SignUpDtoMock } from '../../test/utils/mock/user.mock';
+import {
+  ClientMock,
+  SignInDtoMock,
+  SignUpDtoMock,
+} from '../../test/utils/mock/user.mock';
 
 describe('AuthController', () => {
   let controller: AuthController;
   let authService: AuthService;
   beforeEach(async () => {
-    jest.mock('aws-sdk')
+    jest.mock('aws-sdk');
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       imports: [
         UserModule,
         ConfigModule,
-        TypeOrmModule.forRoot({...dataSourceOptions }),
+        TypeOrmModule.forRoot({ ...dataSourceOptions }),
         TypeOrmModule.forFeature([Photo, Client]),
       ],
       exports: [],
@@ -33,9 +37,9 @@ describe('AuthController', () => {
         UserService,
         JwtService,
         PhotoService,
-        ClientService, 
+        ClientService,
         S3Service,
-        Photo
+        Photo,
       ],
     }).compile();
     controller = module.get<AuthController>(AuthController);
@@ -44,18 +48,17 @@ describe('AuthController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
-  })
+  });
 
   it('should return client after signup', async () => {
     jest.spyOn(authService, 'signUp').mockResolvedValue(ClientMock);
-    const result = await authService.signUp(SignUpDtoMock, {images: []});
+    const result = await authService.signUp(SignUpDtoMock, { images: [] });
     expect(result).toBe(ClientMock);
-  })
+  });
 
   it('should return client after signin', async () => {
     jest.spyOn(authService, 'signIn').mockResolvedValue(ClientMock);
     const result = await authService.signIn(SignInDtoMock);
     expect(result).toBe(ClientMock);
-  })
+  });
 });
-

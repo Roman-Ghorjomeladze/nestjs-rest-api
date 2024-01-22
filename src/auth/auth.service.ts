@@ -30,11 +30,15 @@ export class AuthService {
   async signIn(dto: SignInDto): Promise<any> {
     const user = await this.usersService.findByEmail(dto.email);
     if (!user) {
-      throw new NotFoundException('User with such credentials does not exists!');
+      throw new NotFoundException(
+        'User with such credentials does not exists!',
+      );
     }
     const isMatch = await bcrypt.compare(dto.password, user.password);
     if (!isMatch) {
-      throw new NotFoundException('User with such credentials does not exists!');
+      throw new NotFoundException(
+        'User with such credentials does not exists!',
+      );
     }
     try {
       const client = await this.clientService.getClientByUserId(user.id);
@@ -44,8 +48,10 @@ export class AuthService {
       };
 
       return {
-          accessToken: await this.jwtService.signAsync(payload),
-          refreshToken: await this.jwtService.signAsync(payload, {expiresIn: '7d'}),
+        accessToken: await this.jwtService.signAsync(payload),
+        refreshToken: await this.jwtService.signAsync(payload, {
+          expiresIn: '7d',
+        }),
         user: client,
       };
     } catch (error) {
@@ -98,14 +104,12 @@ export class AuthService {
     }
   }
 
-  async refreshToken (dto: RefreshTokenDto): Promise<{accessToken: string}> {
+  async refreshToken(dto: RefreshTokenDto): Promise<{ accessToken: string }> {
     const payload = await this.jwtService.verifyAsync(dto.refreshToken);
-    const user = await this.clientService.getClientByUserId(
-      payload.sub.userId,
-    );
+    const user = await this.clientService.getClientByUserId(payload.sub.userId);
     if (!user) {
       throw new UnauthorizedException();
     }
-    return {accessToken: await this.jwtService.signAsync(payload)}
+    return { accessToken: await this.jwtService.signAsync(payload) };
   }
 }

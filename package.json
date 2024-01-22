@@ -1,8 +1,8 @@
 {
-  "name": "cobbleweb",
+  "name": "Media API",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "REST API for login and registration plus file upload to AWS S3",
+  "author": "Roman Ghorjomeladze",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -19,8 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "npm run build && npx typeorm -d dist/common/db/data-source.js ",
+    "migrate": "npm run typeorm -- migration:run",
     "migration:generate": "npm run typeorm -- migration:generate",
-    "migration:run": "npm run typeorm -- migration:run",
     "migration:revert": "npm run typeorm -- migration:revert"
   },
   "dependencies": {

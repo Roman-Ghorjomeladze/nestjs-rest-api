@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
-import * as path from 'path'
+import * as path from 'path';
 import * as AWS from 'aws-sdk';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class S3Service {
     const extension = path.extname(fileName);
     const baseName = path.basename(fileName);
     const randomString = uuidv4();
-    return `${baseName}_${randomString}${extension}`
+    return `${baseName}_${randomString}${extension}`;
   }
 
   async uploadFile(file: Express.Multer.File) {

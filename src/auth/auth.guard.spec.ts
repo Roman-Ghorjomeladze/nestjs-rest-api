@@ -1,20 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { AuthGuard } from './auth.guard';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
-import { Request } from 'express';
-import { PublicRoutes } from './constants';
 import { ClientService } from '../client/client.service';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
-  let jwtService: JwtService;
-  let configService: ConfigService;
-  let clientService: ClientService;
+  // let jwtService: JwtService;
+  // let configService: ConfigService;
+  // let clientService: ClientService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    await Test.createTestingModule({
       providers: [
         AuthGuard,
         {
@@ -38,10 +36,10 @@ describe('AuthGuard', () => {
       ],
     }).compile();
 
-    guard = module.get<AuthGuard>(AuthGuard);
-    jwtService = module.get<JwtService>(JwtService);
-    configService = module.get<ConfigService>(ConfigService);
-    clientService = module.get<ClientService>(ClientService);
+    // guard = module.get<AuthGuard>(AuthGuard);
+    // jwtService = module.get<JwtService>(JwtService);
+    // configService = module.get<ConfigService>(ConfigService);
+    // clientService = module.get<ClientService>(ClientService);
   });
 
   it('should allow access to public routes', async () => {
